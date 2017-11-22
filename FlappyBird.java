@@ -4,6 +4,7 @@
 // need to record highest score
 // need to generate clouds
 package flappyBird;
+// eat
 
 import java.awt.Color; // color class
 import java.awt.Font; // to use different fonts
