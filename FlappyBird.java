@@ -21,7 +21,13 @@ import java.util.Random; // for random object
 
 import javax.swing.JFrame; // for new instance of JFrame
 import javax.swing.Timer;
-import javax.swing.*;
+
+// import images
+
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 
 // implement interface class that is abstract
@@ -101,6 +107,18 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
         bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 20, 20);
         // X and Y coordinates are at the direct center of the screen
         // size is height 20 and width 20
+        
+        // get image
+        // change pathname e.g ("C:\Users\CASEY\flappyBird\src\flappyBird\truebg.png")
+        try {
+            pic = ImageIO.read(new File("sticker,375x360.u2.png"));
+            background = ImageIO.read(new File("truebg.png"));
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        
+        
 
         // create new columns arraylist
         columns = new ArrayList<Rectangle>();
@@ -123,8 +141,8 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
         // set background color to cyan
         g.setColor(Color.CYAN);
-        // fill up background with cyan
-        g.fillRect(0,0, WIDTH, HEIGHT);
+        // fill up background with picture
+        g.drawImage(background, -600, -239,null);
 
         // set color of ground to orange
         g.setColor(ground);
