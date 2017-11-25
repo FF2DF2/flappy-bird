@@ -38,6 +38,14 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
     // create object square or "Flappy Bird"
     public Rectangle bird;
+    
+    // create image object
+    public Image pic;
+    public Image background;
+    
+    // set colors
+    public static final Color grass = new Color(84, 126, 150);
+    public static final Color ground = new Color(35, 32, 85);
 
     // create column or wall arraylist of type Rectangle
     public ArrayList<Rectangle> columns;
@@ -119,12 +127,12 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
         g.fillRect(0,0, WIDTH, HEIGHT);
 
         // set color of ground to orange
-        g.setColor(Color.orange);
+        g.setColor(ground);
         // set position of ground to take up the entire width of the screen at height 150
         g.fillRect(0, HEIGHT - 120, WIDTH, 150);
 
         // set color of grass on the ground
-        g.setColor(Color.green);
+        g.setColor(grass);
         // set position of grass to take the take up the entire width of the screen just above the ground
         g.fillRect(0, HEIGHT - 120, WIDTH, 20);
 
