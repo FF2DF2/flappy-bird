@@ -5,6 +5,7 @@
 // need to generate clouds
 package flappyBird;
 
+/*
 import java.awt.Color; // color class
 import java.awt.Font; // to use different fonts
 import java.awt.Graphics;
@@ -27,6 +28,15 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+ */
+import java.awt.*; // color class
+import java.awt.event.*;
+import java.util.ArrayList; // for arraylist of rectangle
+import java.util.Random; // for random object
+import javax.swing.*; // for new instance of JFrame
+
+import java.io.*;
+import javax.imageio.*;
 
 
 // implement interface class that is abstract
