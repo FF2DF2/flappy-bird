@@ -375,6 +375,10 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         renderer.repaint();
     }
 
+    public void pause() {
+        started = !started;
+    }
+
     // main
     public static void main(String[] args) {
 
@@ -426,6 +430,11 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         // jump with space bar
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             jump();
+        }
+
+        // pause key
+        if(e.getKeyCode() == KeyEvent.VK_P) {
+            pause();
         }
 
         // exit by pressing the Escape key
