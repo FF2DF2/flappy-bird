@@ -138,7 +138,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
         // set background color to cyan
         g.setColor(Color.CYAN);
-        g.drawImage(background, -600, -239,null);
+        g.drawImage(background, -300, -239,null);
 
         // set color of ground to orange
         g.setColor(ground);
