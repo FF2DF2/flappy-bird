@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.AffineTransform;
 
 import java.util.ArrayList; // for arraylist of rectangle
 import java.util.Random; // for random object
@@ -108,8 +107,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
         // get image
         try {
-            pic = ImageIO.read(new File("C:\\Users\\Unravel\\IdeaProjects\\FlappyBirdGUIProject\\src\\flappyBird\\sticker,375x360.u2.png"));
-            background = ImageIO.read(new File("C:\\Users\\Unravel\\IdeaProjects\\FlappyBirdGUIProject\\src\\flappyBird\\truebg.png"));
+            pic = ImageIO.read(new File("sticker,375x360.u2.png"));
+            background = ImageIO.read(new File("truebg.png"));
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -150,10 +149,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         // set position of grass to take the take up the entire width of the screen just above the ground
         g.fillRect(0, HEIGHT - 120, WIDTH, 20);
 
-        // set color of flappybird
-        //g.setColor(Color.red);
         // fill bird with the color red at the center of the screen
-        g.drawImage(pic, bird.x, bird.y, bird.width* 3, bird.height* 3, null);
+        g.drawImage(pic, bird.x, bird.y, bird.width * 3, bird.height* 3, null);
 
 
         // iterator to paint columns
@@ -320,11 +317,12 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             // check for collision
             for(Rectangle column : columns) {
 
-                // add score if the bird is in the middle or in between the column once
+                // add score if the bird is in the middle or in between the column
                 if((column.y == 0) && ((bird.x + (bird.width / 2)) > ((column.x + (column.width / 2)) - 5)) && ((bird.x + (bird.width / 2)) < (column.x + (column.width / 2) + 5))) {
                     // add score
                     score++;
-                }
+                } // end if score
+
                 // if bird hits column, game over
                 if(column.intersects(bird)) {
                     gameOver = true;
@@ -346,8 +344,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             } // end for
 
             // set to game over if bird has touched the ceiling
-            if (bird.y > HEIGHT - 120 || bird.y < 0)
-            {
+            if (bird.y > HEIGHT - 120 || bird.y < 0) {
                 gameOver = true;
             } // end if
 
