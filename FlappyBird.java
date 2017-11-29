@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.awt.geom.AffineTransform;
 
 import java.util.ArrayList; // for arraylist of rectangle
 import java.util.Random; // for random object
@@ -83,7 +83,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         jframe.add(renderer);
 
         // set title of program
-        jframe.setTitle("Flappy Bird Clone in Java by Casey Vu");
+        jframe.setTitle("Flappy Bird Clone by Casey Vu, Anthony Hou, & Kevin Su");
 
         // set to terminate the program when when pressing X on the GUI
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // JFrame.EXIT_ON_CLOSE is an integer to close the window
@@ -108,8 +108,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
         // get image
         try {
-            pic = ImageIO.read(new File("C:\\Users\\HERO\\flappyBirdv2\\src\\flappybird\\sticker,375x360.u2.png"));
-            background = ImageIO.read(new File("C:\\Users\\HERO\\flappyBird\\src\\flappyBird\\truebg.png"));
+            pic = ImageIO.read(new File("C:\\Users\\Unravel\\IdeaProjects\\FlappyBirdGUIProject\\src\\flappyBird\\sticker,375x360.u2.png"));
+            background = ImageIO.read(new File("C:\\Users\\Unravel\\IdeaProjects\\FlappyBirdGUIProject\\src\\flappyBird\\truebg.png"));
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -151,9 +151,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         g.fillRect(0, HEIGHT - 120, WIDTH, 20);
 
         // set color of flappybird
-        g.setColor(Color.red);
+        //g.setColor(Color.red);
         // fill bird with the color red at the center of the screen
-        //g.fillRect(bird.x, bird.y, bird.width, bird.height);
         g.drawImage(pic, bird.x, bird.y, bird.width* 3, bird.height* 3, null);
 
 
@@ -198,8 +197,8 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     } // end method repaint
 
     public void addColumn(boolean start) {
-        int space = 260; // adding space between the columns
-        
+        int space = 250; // adding space between the columns
+
         int width = 100; // width of columns
 
 
@@ -234,14 +233,15 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     public void paintColumn(Graphics g, Rectangle column) {
 
         // set color of column to be a darker green
-        g.setColor(Color.green.darker().darker());
+        g.setColor(Color.green.darker());
         g.fillRect(column.x, column.y, column.width, column.height);
     } // end paintColumn
 
     public void jump() {
+
         // reset game after game over
         if(gameOver) {
-            // create new Rectangle
+            // create new Rectangle again
             bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 20, 20);
             // X and Y coordinates are at the direct center of the screen
             // size is height 20 and width 20
@@ -253,13 +253,13 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             yMotion = 0;
             score = 0;
 
-            // add columns right at the beginning
+            // add columns right at the beginning again
             addColumn(true);
             addColumn(true);
             addColumn(true);
             addColumn(true);
             gameOver = false;
-        }
+        } // end if game over
 
         if(!started) {
             started = true;
@@ -268,7 +268,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
                 yMotion = 0;
             }
             yMotion -= 8; // jump by 10 pixels
-        }
+        } // end if !gameOver
     } // end jump
 
     // add actionPerformed method
@@ -313,6 +313,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
                 } // end if
             } // end for
 
+
             bird.y += yMotion;
 
             // right after the bird has moved
@@ -324,7 +325,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
                     // add score
                     score++;
                 }
-                // if bird hits column, gameover
+                // if bird hits column, game over
                 if(column.intersects(bird)) {
                     gameOver = true;
 
@@ -349,10 +350,6 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             {
                 gameOver = true;
             } // end if
-
-            // if the game has not started
-
-
 
             // set bird to stop falling on top of the grass and bird to fall when it hits the ceiling or wall
             if (bird.y + yMotion >= HEIGHT - 120) {
