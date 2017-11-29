@@ -199,7 +199,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
     public void addColumn(boolean start) {
         int space = 300; // adding space between the columns
-        //int width = 100; // width of columns
+        
         int width = 100; // width of columns
 
 
