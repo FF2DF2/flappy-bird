@@ -6,6 +6,7 @@
 package flappyBird;
 
 /*
+for reference
 import java.awt.Color; // color class
 import java.awt.Font; // to use different fonts
 import java.awt.Graphics;
@@ -191,7 +192,6 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
         // display the current score
         if(!gameOver && started) {
-
             g.drawString(String.valueOf(score), WIDTH / 2 - 25, 100);
         }
 
@@ -204,10 +204,9 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     } // end method repaint
 
     public void addColumn(boolean start) {
-        int space = 250; // adding space between the columns
+        int space = 300; // adding space between the columns
 
         int width = 100; // width of columns
-
 
         // create columns with random heights with minimum height 50 and maximum height 300
         int height = 50 + rand.nextInt(300);
@@ -282,7 +281,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // set speed
-        int speed = 11;
+        int speed = 10;
 
         // ticks to add
         ticks++;
@@ -327,11 +326,14 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             // check for collision
             for(Rectangle column : columns) {
 
+
                 // add score if the bird is in the middle or in between the column
                 if((column.y == 0) && ((bird.x + (bird.width / 2)) > ((column.x + (column.width / 2)) - 5)) && ((bird.x + (bird.width / 2)) < (column.x + (column.width / 2) + 5))) {
                     // add score
                     score++;
                 } // end if score
+
+
 
                 // if bird hits column, game over
                 if(column.intersects(bird)) {
@@ -368,7 +370,6 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             }
 
         } // end outer if
-
 
         // call renderer repaint
         renderer.repaint();
@@ -408,6 +409,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     public void mouseExited(MouseEvent e) {
 
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
