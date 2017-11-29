@@ -154,7 +154,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         g.setColor(Color.red);
         // fill bird with the color red at the center of the screen
         //g.fillRect(bird.x, bird.y, bird.width, bird.height);
-        g.drawImage(pic, bird.x, bird.y, bird.width* 2, bird.height* 2, null);
+        g.drawImage(pic, bird.x, bird.y, bird.width* 3, bird.height* 3, null);
 
 
         // iterator to paint columns
