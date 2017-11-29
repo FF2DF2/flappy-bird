@@ -59,7 +59,6 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
     // create variables for space bar ticks and yMotion for the y motion of the bird
     public int ticks, yMotion, score;
-    public int highScore = 0;
 
     // create a boolean gameOver, and started so that bird move until it has started
     // set gameOver and started to false
@@ -200,7 +199,9 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
     public void addColumn(boolean start) {
         int space = 300; // adding space between the columns
+        //int width = 100; // width of columns
         int width = 100; // width of columns
+
 
         // create columns with random heights with minimum height 50 and maximum height 300
         int height = 50 + rand.nextInt(300);
@@ -266,14 +267,13 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             if (yMotion > 0) {
                 yMotion = 0;
             }
-            yMotion -= 10; // jump by 10 pixels
+            yMotion -= 8; // jump by 10 pixels
         }
     } // end jump
 
     // add actionPerformed method
     @Override
     public void actionPerformed(ActionEvent e) {
-
         // set speed
         int speed = 10;
 
@@ -291,8 +291,9 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
                 column.x -= speed;
             } // end for
 
-            // remainder of ticks = 0 and yMotion < 15, then call do yMotion +=2
+            // speed of bird falling
             if (ticks % 2 == 0 && yMotion < 15) {
+                //yMotion += 2;
                 yMotion += 2;
             } // end if
 
@@ -319,10 +320,9 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
             for(Rectangle column : columns) {
 
                 // add score if the bird is in the middle or in between the column once
-                if(column.y == 0 && bird.x  + bird.width / 2 > column.x + column.width / 2 - 5 && bird.x + bird.width / 2 < column.x + column.width / 2 + 5) {
+                if((column.y == 0) && ((bird.x + (bird.width / 2)) > ((column.x + (column.width / 2)) - 5)) && ((bird.x + (bird.width / 2)) < (column.x + (column.width / 2) + 5))) {
                     // add score
                     score++;
-
                 }
                 // if bird hits column, gameover
                 if(column.intersects(bird)) {
