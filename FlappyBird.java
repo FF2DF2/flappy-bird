@@ -275,7 +275,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // set speed
-        int speed = 10;
+        int speed = 14;
 
         // ticks to add
         ticks++;
