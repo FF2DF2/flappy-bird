@@ -4,7 +4,6 @@
 // need to record highest score
 // need to generate clouds
 package flappyBird;
-// eat
 
 import java.awt.Color; // color class
 import java.awt.Font; // to use different fonts
@@ -15,21 +14,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList; // for arraylist of rectangle
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+
+import java.util.ArrayList; // for arraylist of rectangle
 import java.util.Random; // for random object
 
 import javax.swing.JFrame; // for new instance of JFrame
 import javax.swing.Timer;
-import javax.swing.*;
+
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 
 // implement interface class that is abstract
-public class FlappyBird extends JPanel implements ActionListener, MouseListener, KeyListener{
+public class FlappyBird implements ActionListener, MouseListener, KeyListener{
 
     // static instance of flappyBird
     public static FlappyBird flappyBird;
+
+    public static final int FPS = 60;
 
     // final instance variable for resolution 800 x 800 square
     public final int WIDTH = 800, HEIGHT = 800;
@@ -39,13 +46,19 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
     // create object square or "Flappy Bird"
     public Rectangle bird;
+    public Image pic;
+    public Image background;
+
+    // set colors
+    public static final Color grass = new Color(84, 126, 150);
+    public static final Color ground = new Color(35, 32, 85);
+
 
     // create column or wall arraylist of type Rectangle
     public ArrayList<Rectangle> columns;
 
     // create variables for space bar ticks and yMotion for the y motion of the bird
-    public int ticks, yMotion, score, score2;
-    public int highScore = 0;
+    public int ticks, yMotion, score;
 
     // create a boolean gameOver, and started so that bird move until it has started
     // set gameOver and started to false
@@ -58,7 +71,7 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
     public FlappyBird() {
         // create a new instance of  jframe
         JFrame jframe = new JFrame();
-        Timer timer = new Timer(20, this); // timer at 20, listener is this
+        Timer timer = new Timer(1000/FPS, this);
 
         // create new renderer
         renderer = new Renderer();
@@ -92,6 +105,15 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
         // create new Rectangle
         bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 20, 20);
+
+        // get image
+        try {
+            pic = ImageIO.read(new File("C:\\Users\\HERO\\flappyBirdv2\\src\\flappybird\\sticker,375x360.u2.png"));
+            background = ImageIO.read(new File("C:\\Users\\HERO\\flappyBird\\src\\flappyBird\\truebg.png"));
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
         // X and Y coordinates are at the direct center of the screen
         // size is height 20 and width 20
 
@@ -116,23 +138,23 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
         // set background color to cyan
         g.setColor(Color.CYAN);
-        // fill up background with cyan
-        g.fillRect(0,0, WIDTH, HEIGHT);
+        g.drawImage(background, -600, -239,null);
 
         // set color of ground to orange
-        g.setColor(Color.orange);
+        g.setColor(ground);
         // set position of ground to take up the entire width of the screen at height 150
         g.fillRect(0, HEIGHT - 120, WIDTH, 150);
 
         // set color of grass on the ground
-        g.setColor(Color.green);
+        g.setColor(grass);
         // set position of grass to take the take up the entire width of the screen just above the ground
         g.fillRect(0, HEIGHT - 120, WIDTH, 20);
 
         // set color of flappybird
         g.setColor(Color.red);
         // fill bird with the color red at the center of the screen
-        g.fillRect(bird.x, bird.y, bird.width, bird.height);
+        //g.fillRect(bird.x, bird.y, bird.width, bird.height);
+        g.drawImage(pic, bird.x, bird.y, bird.width* 2, bird.height* 2, null);
 
 
         // iterator to paint columns
@@ -157,18 +179,6 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
             // display last score
             g.drawString("Score: " + String.valueOf(score), 100, HEIGHT / 2 - 150);
-            
-            /*
-            if(score > highScore) {
-                score2 = highScore;
-                highScore = score;
-                // display last score
-                g.drawString("Score: " + String.valueOf(score2), 100, HEIGHT / 2 - 150);
-             } else if(score < score2) {
-                score2 = score;
-                g.drawString("Score: " + String.valueOf(score2), 100, HEIGHT / 2 - 150);
-            }
-            */
 
 
         } // end if
@@ -181,8 +191,6 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
         // display the high score after game over
         if(!gameOver && started) {
-
-
             g.drawString(String.valueOf(score), WIDTH / 2 - 25, 100);
         }
         // test repaint will print twice due to double buffering
@@ -191,7 +199,9 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
 
     public void addColumn(boolean start) {
         int space = 300; // adding space between the columns
+        //int width = 100; // width of columns
         int width = 100; // width of columns
+
 
         // create columns with random heights with minimum height 50 and maximum height 300
         int height = 50 + rand.nextInt(300);
@@ -212,7 +222,6 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
         } else { // to append this to the last column that is generated
 
             // getting column from the array list by getting the one at the poisiont of columns.size to become 0 starting at the position of 0 and the next one will start at position of 1
-            //
             // ground column
             columns.add(new Rectangle(columns.get(columns.size() - 1).x + 600, HEIGHT - height - 120, width, height));
 
@@ -225,7 +234,7 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
     public void paintColumn(Graphics g, Rectangle column) {
 
         // set color of column to be a darker green
-        g.setColor(Color.green.darker());
+        g.setColor(Color.green.darker().darker());
         g.fillRect(column.x, column.y, column.width, column.height);
     } // end paintColumn
 
@@ -258,16 +267,13 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
             if (yMotion > 0) {
                 yMotion = 0;
             }
-            yMotion -= 10; // jump by 10 pixels
+            yMotion -= 8; // jump by 10 pixels
         }
-
-
     } // end jump
 
     // add actionPerformed method
     @Override
     public void actionPerformed(ActionEvent e) {
-
         // set speed
         int speed = 10;
 
@@ -285,8 +291,9 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
                 column.x -= speed;
             } // end for
 
-            // remainder of ticks = 0 and yMotion < 15, then call do yMotion +=2
+            // speed of bird falling
             if (ticks % 2 == 0 && yMotion < 15) {
+                //yMotion += 2;
                 yMotion += 2;
             } // end if
 
@@ -313,11 +320,11 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
             for(Rectangle column : columns) {
 
                 // add score if the bird is in the middle or in between the column once
-                if(column.y == 0 && bird.x  + bird.width / 2 > column.x + column.width / 2 - 5 && bird.x + bird.width / 2 < column.x + column.width / 2 + 5) {
+                if((column.y == 0) && ((bird.x + (bird.width / 2)) > ((column.x + (column.width / 2)) - 5)) && ((bird.x + (bird.width / 2)) < (column.x + (column.width / 2) + 5))) {
                     // add score
                     score++;
-
                 }
+                // if bird hits column, gameover
                 if(column.intersects(bird)) {
                     gameOver = true;
 
@@ -413,6 +420,7 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
         // jump with space bar
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             jump();
+            //bird.jump();
         }
 
         // exit by pressing the Escape key
@@ -421,5 +429,4 @@ public class FlappyBird extends JPanel implements ActionListener, MouseListener,
         } // end if
     }
 } // end public class FlappyBird
-
 
