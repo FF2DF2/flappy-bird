@@ -275,7 +275,7 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // set speed
-        int speed = 14;
+        int speed = 11;
 
         // ticks to add
         ticks++;
@@ -417,7 +417,6 @@ public class FlappyBird implements ActionListener, MouseListener, KeyListener{
         // jump with space bar
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             jump();
-            //bird.jump();
         }
 
         // exit by pressing the Escape key
