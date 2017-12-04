@@ -104,7 +104,11 @@ public class FlappyBird implements ActionListener, KeyListener, MouseListener {
             bird.jump();
             paused = false;
         }
-        else if(e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+
+        if(e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+            paused = true;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_P) {
             paused = true;
         }
     }
