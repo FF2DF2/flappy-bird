@@ -6,10 +6,7 @@ package flappybird;
 
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import javax.swing.Timer;
  *
  * @author User
  */
-public class FlappyBird implements ActionListener, KeyListener {
+public class FlappyBird implements ActionListener, KeyListener, MouseListener {
 
     public static final int FPS = 60, WIDTH = 640, HEIGHT = 480;
 
@@ -47,6 +44,7 @@ public class FlappyBird implements ActionListener, KeyListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.addKeyListener(this);
+        frame.addMouseListener(this);
 
         paused = true;
 
@@ -107,10 +105,10 @@ public class FlappyBird implements ActionListener, KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_UP) {
+        if(e.getKeyCode()==KeyEvent.VK_SPACE) {
             bird.jump();
         }
-        else if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+        else if(e.getKeyCode()==KeyEvent.VK_ESCAPE) {
             paused = false;
         }
     }
@@ -123,5 +121,30 @@ public class FlappyBird implements ActionListener, KeyListener {
 
     public boolean paused() {
         return paused;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        bird.jump();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
