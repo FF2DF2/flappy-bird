@@ -4,17 +4,12 @@
  */
 package flappybird;
 
-import java.awt.Image;
+
 import java.awt.Rectangle;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
+
 
 /**
  *
@@ -107,9 +102,10 @@ public class FlappyBird implements ActionListener, KeyListener, MouseListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode()==KeyEvent.VK_SPACE) {
             bird.jump();
+            paused = false;
         }
         else if(e.getKeyCode()==KeyEvent.VK_ESCAPE) {
-            paused = false;
+            paused = true;
         }
     }
     public void keyReleased(KeyEvent e) {
@@ -126,6 +122,7 @@ public class FlappyBird implements ActionListener, KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         bird.jump();
+        paused = false;
     }
 
     @Override
