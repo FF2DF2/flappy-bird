@@ -44,7 +44,7 @@ public class Bird {
 
     public void reset() {
         x = 640/2;
-        y = 640/2;
+        y = 480/2;
         vx = vy = 0;
     }
 }
