@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package flappybird;
 
 
@@ -11,10 +8,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 
-/**
- *
- * @author User
- */
 public class FlappyBird implements ActionListener, KeyListener, MouseListener {
 
     public static final int FPS = 60, WIDTH = 640, HEIGHT = 480;
@@ -29,7 +22,7 @@ public class FlappyBird implements ActionListener, KeyListener, MouseListener {
     private boolean paused;
 
     public void go() {
-        frame = new JFrame("Flappy Bird");
+        frame = new JFrame("Flappy Bird by Casey Vu, Kevin Su, & Anthony Hou");
         bird = new Bird();
         rects = new ArrayList<Rectangle>();
         panel = new GamePanel(this, bird, rects);
