@@ -1,446 +1,127 @@
-// Casey Vu, Anthony Hou, Kevin Su
-// FlappyBird GUI
-// Description: Creating rectangles to act as walls inside a giant Rectangle
-// need to record highest score
-// need to generate clouds
-package flappyBird;
-
 /*
-for reference
-import java.awt.Color; // color class
-import java.awt.Font; // to use different fonts
-import java.awt.Graphics;
-import java.awt.Rectangle;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import java.util.ArrayList; // for arraylist of rectangle
-import java.util.Random; // for random object
-
-import javax.swing.JFrame; // for new instance of JFrame
-import javax.swing.Timer;
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package flappybird;
 
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+/**
+ *
+ * @author User
  */
-import java.awt.*; // color class
-import java.awt.event.*;
-import java.util.ArrayList; // for arraylist of rectangle
-import java.util.Random; // for random object
-import javax.swing.*; // for new instance of JFrame
+public class FlappyBird implements ActionListener, KeyListener {
+
+    public static final int FPS = 60, WIDTH = 640, HEIGHT = 480;
+
+    private Bird bird;
+    private JFrame frame;
+    private JPanel panel;
+    private ArrayList<Rectangle> rects;
+    private int time, scroll;
+    private Timer t;
+
+    private boolean paused;
+
+    public void go() {
+        frame = new JFrame("Flappy Bird");
+        bird = new Bird();
+        rects = new ArrayList<Rectangle>();
+        panel = new GamePanel(this, bird, rects);
+        frame.add(panel);
+
+        frame.setSize(WIDTH, HEIGHT);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.addKeyListener(this);
+
+        paused = true;
+
+        t = new Timer(1000/FPS, this);
+        t.start();
+    }
+    public static void main(String[] args) {
+        new FlappyBird().go();
+    }
 
-import java.io.*;
-import javax.imageio.*;
-
-
-// implement interface class that is abstract
-public class FlappyBird implements ActionListener, MouseListener, KeyListener{
-
-    // static instance of flappyBird
-    public static FlappyBird flappyBird;
-
-    public static final int FPS = 60;
-
-    // final instance variable for resolution 800 x 800 square
-    public final int WIDTH = 800, HEIGHT = 800;
-
-    // create instance variable of renderer
-    public Renderer renderer;
-
-    // create object square or "Flappy Bird"
-    public Rectangle bird;
-    public Image pic;
-    public Image background;
-
-    // set colors
-    public static final Color grass = new Color(84, 126, 150);
-    public static final Color ground = new Color(35, 32, 85);
-
-
-    // create column or wall arraylist of type Rectangle
-    public ArrayList<Rectangle> columns;
-
-    // create variables for space bar ticks and yMotion for the y motion of the bird
-    public int ticks, yMotion, score;
-
-    // create a boolean gameOver, and started so that bird move until it has started
-    // set gameOver and started to false
-    public boolean gameOver, started;
-
-    // create a new random object
-    public Random rand;
-
-    // constructor
-    public FlappyBird() {
-        // create a new instance of  jframe
-        JFrame jframe = new JFrame();
-        Timer timer = new Timer(1000/FPS, this);
-
-        // create new renderer
-        renderer = new Renderer();
-
-        // create new rand
-        rand = new Random();
-
-        // add renderer
-        jframe.add(renderer);
-
-        // set title of program
-        jframe.setTitle("Flappy Bird Clone by Casey Vu, Anthony Hou, & Kevin Su");
-
-        // set to terminate the program when when pressing X on the GUI
-        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // JFrame.EXIT_ON_CLOSE is an integer to close the window
-
-        // set resolution of game screen
-        jframe.setSize(WIDTH, HEIGHT);
-
-        // add mouse listener
-        jframe.addMouseListener(this);
-
-        // add key listener
-        jframe.addKeyListener(this);
-
-        // prevent screen from resizing
-        jframe.setResizable(false);
-
-        // set screen visible
-        jframe.setVisible(true);
-
-        // create new Rectangle
-        bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 20, 20);
-
-        // get image
-        try {
-            pic = ImageIO.read(new File("sticker,375x360.u2.png"));
-            background = ImageIO.read(new File("truebg.png"));
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-        // X and Y coordinates are at the direct center of the screen
-        // size is height 20 and width 20
-
-        // create new columns arraylist
-        columns = new ArrayList<Rectangle>();
-
-        // add columns right at the beginning
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-
-        // repaint more than twice
-        timer.start();
-    } // end constructor
-
-
-    // create method repaint
-    public void repaint(Graphics g) {
-
-        // painting from top to bottom
-
-        // set background color to cyan
-        g.setColor(Color.CYAN);
-        g.drawImage(background, -300, -239,null);
-
-        // set color of ground to orange
-        g.setColor(ground);
-        // set position of ground to take up the entire width of the screen at height 150
-        g.fillRect(0, HEIGHT - 120, WIDTH, 150);
-
-        // set color of grass on the ground
-        g.setColor(grass);
-        // set position of grass to take the take up the entire width of the screen just above the ground
-        g.fillRect(0, HEIGHT - 120, WIDTH, 20);
-
-        // fill bird with the color red at the center of the screen
-        g.drawImage(pic, bird.x, bird.y, bird.width * 3, bird.height* 3, null);
-
-
-        // iterator to paint columns
-        for (Rectangle column : columns) {
-            // fill in columns with colors
-            paintColumn(g, column);
-        } // end for
-
-        // set font color
-        g.setColor(Color.white);
-        // set fount type and size
-        g.setFont(new Font("Arial", 1, 100));
-
-        // if game has not started
-        if(!started){
-            g.drawString("Click to start!", 75, HEIGHT / 2 - 50);
-        } // end if
-
-        // if game is over, print Game Over Message
-        if(gameOver){
-            g.drawString("Game Over!", 100, HEIGHT / 2 - 50);
-
-            // display last score
-            g.drawString("Score: " + String.valueOf(score), 100, HEIGHT / 2 - 150);
-
-
-        } // end if
-
-        // display the current score
-        if(!gameOver && started) {
-            g.drawString(String.valueOf(score), WIDTH / 2 - 25, 100);
-        }
-
-        // display the high score after game over
-        if(!gameOver && started) {
-            g.drawString(String.valueOf(score), WIDTH / 2 - 25, 100);
-        }
-        // test repaint will print twice due to double buffering
-
-    } // end method repaint
-
-    public void addColumn(boolean start) {
-        int space = 300; // adding space between the columns
-
-        int width = 100; // width of columns
-
-        // create columns with random heights with minimum height 50 and maximum height 300
-        int height = 50 + rand.nextInt(300);
-
-        if (start) {
-            // starting columns
-
-            // ground  column
-            // this x is all the way to the right of the screen then add the width 300
-            // since java adds everything staring at (0, 0) "top left" moving over by width, you would need to add the width
-            // if there are any other columns, the 300 will move over the columns
-            // HEIGHT - height - 120 allows the column to be at the top of the grass
-            columns.add(new Rectangle(WIDTH + width + columns.size() * 300, HEIGHT - height - 120, width, height));
-
-            // ceiling column
-            columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
-
-        } else { // to append this to the last column that is generated
-
-            // getting column from the array list by getting the one at the poisiont of columns.size to become 0 starting at the position of 0 and the next one will start at position of 1
-            // ground column
-            columns.add(new Rectangle(columns.get(columns.size() - 1).x + 600, HEIGHT - height - 120, width, height));
-
-            // ceiling column
-            columns.add(new Rectangle(columns.get(columns.size() - 1).x, 0, width, HEIGHT - height - space));
-        } // end if else
-    } // end method addColumn
-
-    // create new method rendererColumn
-    public void paintColumn(Graphics g, Rectangle column) {
-
-        // set color of column to be a darker green
-        g.setColor(Color.green.darker());
-        g.fillRect(column.x, column.y, column.width, column.height);
-    } // end paintColumn
-
-    public void jump() {
-
-        // reset game after game over
-        if(gameOver) {
-            // create new Rectangle again
-            bird = new Rectangle(WIDTH / 2 - 10, HEIGHT / 2 - 10, 20, 20);
-            // X and Y coordinates are at the direct center of the screen
-            // size is height 20 and width 20
-
-            // clear columns
-            columns.clear();
-
-            // set yMotion to 0
-            yMotion = 0;
-            score = 0;
-
-            // add columns right at the beginning again
-            addColumn(true);
-            addColumn(true);
-            addColumn(true);
-            addColumn(true);
-            gameOver = false;
-        } // end if game over
-
-        if(!started) {
-            started = true;
-        } else if(!gameOver){
-            if (yMotion > 0) {
-                yMotion = 0;
-            }
-            yMotion -= 8; // jump by 10 pixels
-        } // end if !gameOver
-    } // end jump
-
-    // add actionPerformed method
     @Override
     public void actionPerformed(ActionEvent e) {
-        // set speed
-        int speed = 10;
+        panel.repaint();
+        if(!paused) {
+            bird.physics();
+            if(scroll % 90 == 0) {
+                Rectangle r = new Rectangle(WIDTH, 0, GamePanel.PIPE_W, (int) ((Math.random()*HEIGHT)/5f + (0.2f)*HEIGHT));
+                int h2 = (int) ((Math.random()*HEIGHT)/5f + (0.2f)*HEIGHT);
+                Rectangle r2 = new Rectangle(WIDTH, HEIGHT - h2, GamePanel.PIPE_W, h2);
+                rects.add(r);
+                rects.add(r2);
+            }
+            ArrayList<Rectangle> toRemove = new ArrayList<Rectangle>();
+            boolean game = true;
+            for(Rectangle r : rects) {
+                r.x-=3;
+                if(r.x + r.width <= 0) {
+                    toRemove.add(r);
+                }
+                if(r.contains(bird.x, bird.y)) {
+                    JOptionPane.showMessageDialog(frame, "You lose!\n"+"Your score was: "+time+".");
+                    game = false;
+                }
+            }
+            rects.removeAll(toRemove);
+            time++;
+            scroll++;
 
-        // ticks to add
-        ticks++;
-
-        // if started, everything begins/moves
-        if(started) {
-            // loop to move the columns over
-            // add a column each time
-            for (int i = 0; i < columns.size(); i++) {
-                Rectangle column = columns.get(i);
-
-                // decrease rectangle speed
-                column.x -= speed;
-            } // end for
-
-            // speed of bird falling
-            if (ticks % 2 == 0 && yMotion < 15) {
-                //yMotion += 2;
-                yMotion += 2;
-            } // end if
-
-            // loop to move the columns over
-            // add a column each time
-            for (int i = 0; i < columns.size(); i++) {
-                Rectangle column = columns.get(i);
-
-                if (column.x + column.width < 0) {
-                    // make sure that column is removed
-                    columns.remove(column);
-
-                    // if it's a top column, then add another column to have an infinite loop of walls
-                    if(column.y == 0) {
-                        addColumn(false);
-                    } // end inner if
-                } // end if
-            } // end for
-
-
-            bird.y += yMotion;
-
-            // right after the bird has moved
-            // check for collision
-            for(Rectangle column : columns) {
-
-
-                // add score if the bird is in the middle or in between the column
-                if((column.y == 0) && ((bird.x + (bird.width / 2)) > ((column.x + (column.width / 2)) - 5)) && ((bird.x + (bird.width / 2)) < (column.x + (column.width / 2) + 5))) {
-                    // add score
-                    score++;
-                } // end if score
-
-
-
-                // if bird hits column, game over
-                if(column.intersects(bird)) {
-                    gameOver = true;
-
-                    if(bird.x <= column.x) {
-                        bird.x = column.x - bird.width;
-                    } else {
-                        if (column.y != 0) {
-                            bird.y = column.y - bird.height;
-                        } else if(bird.y < column.height) {
-                            bird.y = column.height;
-
-                        }
-                    }
-
-                    // when bird falls, the column will move the bird
-                    bird.x = column.x - bird.width;
-                } // end if
-            } // end for
-
-            // set to game over if bird has touched the ceiling
-            if (bird.y > HEIGHT - 120 || bird.y < 0) {
-                gameOver = true;
-            } // end if
-
-            // set bird to stop falling on top of the grass and bird to fall when it hits the ceiling or wall
-            if (bird.y + yMotion >= HEIGHT - 120) {
-                // height right above the grass
-                bird.y = HEIGHT - 120 - bird.height;
-
-                // game over if bird touches the ground
-                gameOver = true;
+            if(bird.y > HEIGHT || bird.y+bird.RAD < 0) {
+                game = false;
             }
 
-        } // end outer if
+            if(!game) {
+                rects.clear();
+                bird.reset();
+                time = 0;
+                scroll = 0;
+                paused = true;
+            }
+        }
+        else {
 
-        // call renderer repaint
-        renderer.repaint();
+        }
     }
 
-    public void pause() {
-        started = !started;
+    public int getScore() {
+        return time;
     }
 
-    // main
-    public static void main(String[] args) {
-
-        // setting variable flappyBird to a new FlappyBird
-        // creating a new instance of flappyBird here
-        flappyBird = new FlappyBird();
-
-    } // end main
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // to jump by clicking mouse
-        jump();
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_UP) {
+            bird.jump();
+        }
+        else if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+            paused = false;
+        }
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
+    public void keyReleased(KeyEvent e) {
 
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-
-    @Override
     public void keyTyped(KeyEvent e) {
 
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+    public boolean paused() {
+        return paused;
     }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // jump with space bar
-        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            jump();
-        }
-
-        // pause key
-        if(e.getKeyCode() == KeyEvent.VK_P) {
-            pause();
-        }
-
-        // exit by pressing the Escape key
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            System.exit(0);
-        } // end if
-    }
-} // end public class FlappyBird
-
+}
