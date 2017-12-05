@@ -1,42 +1,32 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+Casey Vu, Kevin Su, Anthony Hou
+Purpose: To render the pipes and set starting and game over message..
  */
 package flappybird;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-/**
- *
- * @author User
- */
 public class GamePanel extends JPanel {
 
     private Bird bird;
     private ArrayList<Rectangle> rects;
     private FlappyBird fb;
     private Font scoreFont, pauseFont;
-    public static final Color bg = new Color(0, 158, 158);
     public static final int PIPE_W = 50, PIPE_H = 30;
     private Image pipeHead, pipeLength, background;
 
+    //This constructor gets the font for the messages, and images for the pipes.
     public GamePanel(FlappyBird fb, Bird bird, ArrayList<Rectangle> rects) {
         this.fb = fb;
         this.bird = bird;
         this.rects = rects;
-        scoreFont = new Font("Comic Sans MS", Font.BOLD, 18);
-        pauseFont = new Font("Arial", Font.BOLD, 48);
+        scoreFont = new Font("Arial", Font.BOLD, 18);
+        pauseFont = new Font("Arial", Font.BOLD, 30);
 
         try {
             pipeHead = ImageIO.read(new File("78px-Pipe.png"));
@@ -46,29 +36,29 @@ public class GamePanel extends JPanel {
         catch(IOException e) {
             e.printStackTrace();
         }
-    }
+    } // end constructor
+
+    //This method fills the pipes with the images, and draws the string line.
     @Override
     public void paintComponent(Graphics g) {
         g.fillRect(0,0,FlappyBird.WIDTH,FlappyBird.HEIGHT);
         g.drawImage(background, -300, -480, null);
-        //g.setColor(bg);
-        //g.fillRect(0,0,FlappyBird.WIDTH,FlappyBird.HEIGHT);
+
         bird.update(g);
-        g.setColor(Color.RED);
+
         for(Rectangle r : rects) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(Color.GREEN);
-            //g2d.fillRect(r.x, r.y, r.width, r.height);
             AffineTransform old = g2d.getTransform();
             g2d.translate(r.x+PIPE_W/2, r.y+PIPE_H/2);
             if(r.y < FlappyBird.HEIGHT/2) {
                 g2d.translate(0, r.height);
                 g2d.rotate(Math.PI);
-            }
+            } // end if
             g2d.drawImage(pipeHead, -PIPE_W/2, -PIPE_H/2, GamePanel.PIPE_W, GamePanel.PIPE_H, null);
             g2d.drawImage(pipeLength, -PIPE_W/2, PIPE_H/2, GamePanel.PIPE_W, r.height, null);
             g2d.setTransform(old);
-        }
+        } // end for
         g.setFont(scoreFont);
         g.setColor(Color.BLACK);
         g.drawString("Score: "+fb.getScore(), 10, 20);
@@ -76,8 +66,8 @@ public class GamePanel extends JPanel {
         if(fb.paused()) {
             g.setFont(pauseFont);
             g.setColor(new Color(0,0,0,170));
-            g.drawString("PAUSED", FlappyBird.WIDTH/2-100, FlappyBird.HEIGHT/2-100);
-            g.drawString("PRESS SPACE TO BEGIN", FlappyBird.WIDTH/2-300, FlappyBird.HEIGHT/2+50);
-        }
-    }
-}
+            g.drawString("PAUSED", FlappyBird.WIDTH/2-60, FlappyBird.HEIGHT/2-50);
+            g.drawString("CLICK OR PRESS SPACE TO BEGIN", FlappyBird.WIDTH/2-250, FlappyBird.HEIGHT/2+50);
+        } // end if
+    } // end paintComponent()
+} // end class GamePanel
