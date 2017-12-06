@@ -60,12 +60,12 @@ public class GamePanel extends JPanel {
             g2d.setTransform(old);
         } // end for
         g.setFont(scoreFont);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.white);
         g.drawString("Score: "+fb.getScore(), 10, 20);
 
         if(fb.paused()) {
             g.setFont(pauseFont);
-            g.setColor(new Color(0,0,0,170));
+            g.setColor(Color.white);
             g.drawString("PAUSED", FlappyBird.WIDTH/2-60, FlappyBird.HEIGHT/2-50);
             g.drawString("CLICK OR PRESS SPACE TO BEGIN", FlappyBird.WIDTH/2-250, FlappyBird.HEIGHT/2+50);
         } // end if
